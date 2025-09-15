@@ -1,21 +1,23 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-// GET single staff
+// To get the detail of a single staff
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const staffId = Number(id);
 
-  if (isNaN(staffId)) return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
+  if (isNaN(staffId))
+     return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
 
   const staff = await prisma.staff.findUnique({ where: { id: staffId } });
 
-  if (!staff) return NextResponse.json({ error: "Staff not found" }, { status: 404 });
+  if (!staff) 
+    return NextResponse.json({ error: "Staff not found" }, { status: 404 });
 
   return NextResponse.json(staff);
 }
 
-// UPDATE staff
+// To update detail of staff
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const staffId = Number(id);
@@ -29,7 +31,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   return NextResponse.json(updatedStaff);
 }
 
-// DELETE staff
+// To delete a staff from records
 export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const staffId = Number(id);

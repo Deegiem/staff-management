@@ -29,8 +29,7 @@ export default function StaffPage() {
     if (!confirm("Are you sure you want to delete this staff?")) return;
     try {
       await fetch(`/api/staff/${id}`, { method: "DELETE" });
-      // remove deleted staff from UI immediately
-      setStaff((prev) => prev.filter((s) => s.id !== id));
+      setStaff((prev) => prev.filter((staff) => staff.id !== id));
     } catch (err) {
       console.error("Failed to delete staff:", err);
     }

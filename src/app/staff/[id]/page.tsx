@@ -1,4 +1,4 @@
-"use client"; // <-- MUST have this for useState/useEffect
+"use client";
 import { useState, useEffect } from "react";
 import StaffForm from "@/components/StaffForm";
 import { useRouter } from "next/navigation";
@@ -18,7 +18,6 @@ export default function EditStaffPage({ params }: Props) {
   const staffId = Number(params.id);
   const [staffData, setStaffData] = useState<Staff | null>(null);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchStaff = async () => {
