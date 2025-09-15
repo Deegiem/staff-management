@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import StaffForm from "@/components/StaffForm";
 import { useRouter } from "next/navigation";
+import StaffDetailPage from "../page";
 
 type Staff = {
   id: number;
@@ -34,7 +35,7 @@ export default function EditStaffPage({ params }: Props) {
 
   return (
     <div className="p-6">
-      <h1 className="text-xl font-bold mb-4">Edit Staff</h1>
+      <h1 className="text-xl font-bold mb-4">Edit Staff <span className="text-sm text-blue-200">(Click to Edit Staff details)</span></h1>
       <StaffForm initialData={staffData} staffId={staffId} />
     </div>
   );

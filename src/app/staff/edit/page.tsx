@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { useParams } from "next/navigation";
+import { use } from "react";
 
 type Staff = {
   id: number;
@@ -21,12 +23,18 @@ export async function getStaff(id: number): Promise<Staff | null> {
 
   }
 
-export default async function StaffDetailPage({ params }: { params: { id: string } }) {
+export default async function StaffDetailPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   const staffId = Number(params.id);
   const staffData = await getStaff(staffId);
 
   if (!staffData) {
-    return <p className="text-center mt-10 text-red-500">Staff not found</p>;
+    return (
+      <p className="text-center mt-10 text-red-500">Staff not found</p>
+    );
   }
 
   return (
@@ -41,7 +49,7 @@ export default async function StaffDetailPage({ params }: { params: { id: string
         </div>
         <Link 
             className="mt-6 inline-block w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-            href={`/staff/${staffId}`}
+            href={`/staff/edit/${staffId}`}
         >
             Edit details
         </Link>

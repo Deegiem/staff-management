@@ -15,45 +15,47 @@ type StaffTableProps = {
 
 export default function StaffTable({ staff, onDelete }: StaffTableProps) {
   return (
-    <table className="w-full mt-6 border ">
-      <thead>
-        <tr className="bg-blue-900">
-          <th className="p-2 border">Name</th>
-          <th className="p-2 border">Email</th>
-          <th className="p-2 border">Position</th>
-          <th className="p-2 border">Actions</th>
-        </tr>
-      </thead>
-      <tbody className="bg-[#030c27]">
-        {staff.map((staff) => (
-          <tr key={staff.id}>
-            <td className="p-2 border">{staff.name}</td>
-            <td className="p-2 border">{staff.email}</td>
-            <td className="p-2 border">{staff.position}</td>
-            <td className="p-2 border space-x-4">
-              {/* Edit button */}
-              <Link
-                href={`/staff/${staff.id}/edit`}
-                className="px-3 py-1 bg-blue-600 text-white rounded lg hover:bg-blue-700"
-              >
-                View
-              </Link>
-
-              {/* Delete button with confirmation */}
-              <button
-                onClick={() => {
-                  if (confirm(`Are you sure you want to delete ${staff.name}?`)) {
-                    onDelete(staff.id);
-                  }
-                }}
-                className="px-3 py-1 bg-red-600 text-white rounded lg hover:bg-red-700"
-              >
-                Delete
-              </button>
-            </td>
+    <div className="mt-6 overflow-x-auto">
+      <table className="w-full md:w-screen border border-collapse min-w-[400px]">
+        <thead>
+          <tr className="bg-blue-900 text-white text-left">
+            <th className="p-3 border">Name</th>
+            <th className="p-3 border">Email</th>
+            <th className="p-3 border">Position</th>
+            <th className="p-3 border text-center">Actions</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody className="bg-[#030c27] text-gray-200">
+          {staff.map((staff) => (
+            <tr key={staff.id} className="hover:bg-blue-950 transition">
+              <td className="p-3 border">{staff.name}</td>
+              <td className="p-3 border break-words">{staff.email}</td>
+              <td className="p-3 border">{staff.position}</td>
+              <td className="p-3 border text-center space-x-2">
+                {/* Edit button */}
+                <Link
+                  href={`/staff/edit/${staff.id}`}
+                  className="inline-block px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+                >
+                  View
+                </Link>
+
+                {/* Delete button with confirmation */}
+                <button
+                  onClick={() => {
+                    if (confirm(`Are you sure you want to delete ${staff.name}?`)) {
+                      onDelete(staff.id);
+                    }
+                  }}
+                  className="inline-block px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
