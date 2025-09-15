@@ -8,13 +8,18 @@ type Staff = {
   createdAt: string;
 };
 
-async function getStaff(id: number): Promise<Staff | null> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/staff/${id}`, {
-    cache: "no-store",
-  });
-  if (!res.ok) return null;
-  return res.json();
-}
+export async function getStaff(id: number): Promise<Staff | null> {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/staff/${id}`, {
+      cache: "no-store", // this will always fetch fresh data
+    });
+
+    if (!res.ok) {
+      return null;
+    }
+    const data: Staff = await res.json();
+    return data;
+
+  }
 
 export default async function StaffDetailPage({ params }: { params: { id: string } }) {
   const staffId = Number(params.id);

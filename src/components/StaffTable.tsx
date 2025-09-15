@@ -24,7 +24,7 @@ export default function StaffTable({ staff, onDelete }: StaffTableProps) {
           <th className="p-2 border">Actions</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody className="bg-[#030c27]">
         {staff.map((staff) => (
           <tr key={staff.id}>
             <td className="p-2 border">{staff.name}</td>
@@ -36,7 +36,7 @@ export default function StaffTable({ staff, onDelete }: StaffTableProps) {
                 href={`/staff/${staff.id}/edit`}
                 className="px-3 py-1 bg-blue-600 text-white rounded lg hover:bg-blue-700"
               >
-                Edit
+                View
               </Link>
 
               {/* Delete button with confirmation */}

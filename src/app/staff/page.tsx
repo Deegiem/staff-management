@@ -38,7 +38,7 @@ export default function StaffPage() {
 
     if (staff.length === 0) {
       return (
-        <div className="text-center mt-10">
+        <div className="mt-10">
           <p className="text-white text-lg mb-4">No Staff Records Yet</p>
           <p className="text-gray-500 text-sm mb-4">
             Start by adding your first staff record.
