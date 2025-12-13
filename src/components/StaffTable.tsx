@@ -15,26 +15,29 @@ type StaffTableProps = {
 
 export default function StaffTable({ staff, onDelete }: StaffTableProps) {
   return (
-    <div className="mt-6 overflow-x-auto">
-      <table className="w-full md:w-screen border border-collapse min-w-[400px]">
-        <thead>
-          <tr className="bg-blue-900 text-white text-left">
-            <th className="p-3 border">Name</th>
-            <th className="p-3 border">Email</th>
-            <th className="p-3 border">Position</th>
-            <th className="p-3 border text-center">Actions</th>
+    <div className="overflow-x-auto rounded-lg">
+      <table className="min-w-full text-sm text-left border border-blue-100 rounded-lg overflow-hidden">
+        <thead className="bg-blue-50 text-blue-700 uppercase text-xs font-semibold tracking-wide">
+          <tr >
+            <th className="px-5 py-3 border-b border-blue-100">Name</th>
+            <th className="px-5 py-3 border-b border-blue-100">Email</th>
+            <th className="px-5 py-3 border-b border-blue-100">Position</th>
+            <th className="px-5 py-3 border-b border-blue-100 text-center">Actions</th>
           </tr>
         </thead>
-        <tbody className="bg-[#030c27] text-gray-200">
-          {staff.map((staff) => (
-            <tr key={staff.id} className="hover:bg-blue-950 transition">
-              <td className="p-3 border">{staff.name}</td>
-              <td className="p-3 border break-words">{staff.email}</td>
-              <td className="p-3 border">{staff.position}</td>
-              <td className="p-3 border text-center space-x-2">
+        <tbody>
+          {staff.map((staff, idx) => (
+            <tr key={staff.id} className={`transition-all duration-200 ${
+                  idx % 2 === 0 ? "bg-white" : "bg-blue-50/30"
+                } hover:bg-blue-100/50`}>
+              <td className="px-5 py-3 border-b border-blue-100 text-gray-800 font-medium">{staff.name}</td>
+              <td className="px-5 py-3 border-b border-blue-100 text-gray-800 font-medium break-words">{staff.email}</td>
+              <td className="px-5 py-3 border-b border-blue-100 text-gray-800 font-medium">{staff.position}</td>
+              <td className="px-5 py-3 border-b border-blue-100 text-gray-800 font-medium text-center space-x-2">
                 {/* Edit button */}
                 <Link
-                  href={`/staff/edit/${staff.id}`}
+               href={`/staff/edit/${staff.id}`}
+                  // href="/staff/edit"
                   className="inline-block px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
                 >
                   View

@@ -13,11 +13,245 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum TokenType {
+  FIRST_LOGIN
+  PASSWORD_RESET
+}
 
-model Staff {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  position  String
+enum SystemRole {
+  ADMIN
+  HR
+  STAFF
+}
+
+enum EmploymentType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+}
+
+enum StaffStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  PERMITTED_ABSENCE
+}
+
+enum DayOfWeek {
+  MON
+  TUE
+  WED
+  THU
+  FRI
+  SAT
+  SUN
+}
+
+enum LeaveType {
+  SICK
+  CASUAL
+  ANNUAL
+  MATERNITY
+  PATERNITY
+  COMPASSIONATE
+}
+
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+
+model VerificationToken {
+  id        Int       @id @default(autoincrement())
+  staff     Staff     @relation(fields: [staffId], references: [id])
+  staffId   String
+  token     String    @unique
+  type      TokenType
+  expiresAt DateTime
+  used      Boolean   @default(false)
+  createdAt DateTime  @default(now())
+}
+
+model Session {
+  id           String   @id @default(uuid())   // FIXED: String + uuid()
+  staff        Staff    @relation(fields: [staffId], references: [id])
+  staffId      String
+  refreshToken String   @unique
+  revoked      Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  expiresAt    DateTime
+  replacedBy   String?
+}
+
+
+// DEPARTMENTS
+model Department {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  description String?
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  staff     Staff[]
+}
+
+// ROLES
+model Role {
+  id          String    @id @default(uuid())
+  name        String     @unique
+  description String?
+  baseSalary  Decimal?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  staff       Staff[]
+}
+
+// STAFF
+model Staff {
+  id             String          @id @default(uuid())
+  firstName      String
+  lastName       String
+  email          String          @unique
+  phone          String?
+  passwordHash   String
+
+  // Relations
+
+  // ADD THESE MISSING RELATIONS:
+  verificationTokens VerificationToken[]
+  sessions          Session[]
+  roleId         String
+  departmentId   String
+
+  role           Role            @relation(fields: [roleId], references: [id])
+  department     Department      @relation(fields: [departmentId], references: [id])
+
+  employmentType EmploymentType
+  status         StaffStatus     @default(ACTIVE)
+
+  dateOfHire     DateTime
+  dateOfExit     DateTime?
+  profilePhoto   String?
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  attendanceRecords Attendance[]
+  shiftAssignments  StaffShift[]
+  payrollSummaries  PayrollSummary[]
+  leaves            Leave[]
+  auditLogs         AuditLog[]      @relation("AuditActor")
+  approvedLeaves    Leave[]         @relation("LeaveApprover")
+}
+
+// ATTENDANCE
+model Attendance {
+  id          String         @id @default(uuid())
+  staffId     String
+  staff       Staff          @relation(fields: [staffId], references: [id])
+
+  date        DateTime
+  clockIn     DateTime?
+  clockOut    DateTime?
+  hoursWorked Decimal?
+  status      AttendanceStatus
+  notes       String?
+
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@unique([staffId, date])
+}
+
+// SHIFTS
+model Shift {
+  id           String        @id @default(uuid())
+  name         String
+  startTime    DateTime
+  endTime      DateTime
+  breakMinutes Int?
+
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  staffAssignments StaffShift[]
+}
+
+// STAFF SHIFT (link table)
+model StaffShift {
+  id           String     @id @default(uuid())
+  staffId      String
+  shiftId      String
+  dayOfWeek    DayOfWeek
+  effectiveFrom DateTime
+  effectiveTo  DateTime?
+
+  staff        Staff      @relation(fields: [staffId], references: [id])
+  shift        Shift      @relation(fields: [shiftId], references: [id])
+}
+
+// PAYROLL SUMMARIES
+model PayrollSummary {
+  id            String   @id @default(uuid())
+  staffId       String
+  staff         Staff    @relation(fields: [staffId], references: [id])
+
+  month         Int
+  year          Int
+
+  baseSalary    Decimal
+  totalHours    Decimal?
+  overtimeHours Decimal?
+  deductions    Decimal?
+  bonuses       Decimal?
+  netPay        Decimal
+
+  generatedAt   DateTime @default(now())
+
+  @@unique([staffId, month, year])
+}
+
+// LEAVES
+model Leave {
+  id          String      @id @default(uuid())
+  staffId     String
+  type        LeaveType
+  startDate   DateTime
+  endDate     DateTime
+  reason      String?
+
+  status      LeaveStatus @default(PENDING)
+
+  approvedBy  String?  
+  approver    Staff?      @relation("LeaveApprover", fields: [approvedBy], references: [id])
+
+  staff       Staff       @relation(fields: [staffId], references: [id])
+
+  createdAt   DateTime @default(now())
+}
+
+// AUDIT LOGS
+model AuditLog {
+  id          String   @id @default(uuid())
+  action      String
+  actorId     String
+  entity      String
+  entityId    String
+  previousData Json?
+  newData      Json?
+
+  timestamp   DateTime @default(now())
+  ipAddress   String?
+  userAgent   String?
+
+  actor       Staff    @relation("AuditActor", fields: [actorId], references: [id])
 }

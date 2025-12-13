@@ -26,7 +26,6 @@ export default function StaffForm({ initialData, staffId }: Props) {
 
   const router = useRouter();
 
-  // populate form when editing
   useEffect(() => {
     if (initialData) {
       setFormData(initialData);
@@ -64,44 +63,82 @@ export default function StaffForm({ initialData, staffId }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      {error && <p className="text-red-600">{error}</p>}
+    <div className="w-full">
+      {error && (
+        <div className="mb-5 text-center text-sm text-red-600 bg-red-50 p-3 rounded-lg border border-red-100">
+          {error}
+        </div>
+      )}
 
-      <input
-        type="text"
-        name="name"
-        placeholder="Name"
-        value={formData.name}
-        onChange={handleChange}
-        className="border-2 p-2 w-full rounded-lg"
-        required
-      />
-      <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        value={formData.email}
-        onChange={handleChange}
-        className="border-2 p-2 w-full rounded-lg"
-        required
-      />
-      <input
-        type="text"
-        name="position"
-        placeholder="Position"
-        value={formData.position}
-        onChange={handleChange}
-        className="border-2 p-2 w-full rounded-lg"
-        required
-      />
-
-      <button
-        type="submit"
-        className="bg-blue-600 text-white w-full p-2 px-4 py-2 rounded-lg"
-        disabled={loading}
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-5 sm:space-y-6 animate-fadeIn"
       >
-        {loading ? "Saving..." : staffId ? "Update Staff" : "Add Staff"}
-      </button>
-    </form>
+        {/* Full Name */}
+        <div>
+          <label className="block text-gray-700 font-medium mb-2">
+            Full Name
+          </label>
+          <input
+            type="text"
+            name="name"
+            placeholder="Enter staff name"
+            value={formData.name}
+            onChange={handleChange}
+            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+            required
+          />
+        </div>
+
+        {/* Email */}
+        <div>
+          <label className="block text-gray-700 font-medium mb-2">
+            Email Address
+          </label>
+          <input
+            type="email"
+            name="email"
+            placeholder="Enter staff email"
+            value={formData.email}
+            onChange={handleChange}
+            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+            required
+          />
+        </div>
+
+        {/* Position */}
+        <div>
+          <label className="block text-gray-700 font-medium mb-2">
+            Position
+          </label>
+          <input
+            type="text"
+            name="position"
+            placeholder="Enter staff position"
+            value={formData.position}
+            onChange={handleChange}
+            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+            required
+          />
+        </div>
+
+        {/* Submit Button */}
+        <button
+          type="submit"
+          disabled={loading}
+          className={`w-full py-3.5 rounded-lg text-white font-semibold shadow-md transition-all duration-300 ${
+            loading
+              ? "bg-blue-400 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700 hover:shadow-lg"
+          }`}
+        >
+          {loading
+            ? "Saving..."
+            : staffId
+            ? "Update Staff"
+            : "Add Staff"}
+        </button>
+      </form>
+    </div>
   );
 }
