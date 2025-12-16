@@ -357,7 +357,7 @@ export default function DashboardPage() {
               </div>
 
               <Button
-                className="w-full mt-5 h-11 bg-red-600 hover:bg-red-700"
+                className="w-full mt-5 h-11 font-semibold bg-red-600 hover:bg-red-700"
                 onClick={handleLogout}
                 variant="destructive"
               >

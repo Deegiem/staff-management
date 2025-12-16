@@ -7,9 +7,6 @@
 //   prisma.session.updateMany({ where: { refreshToken }, data: { revoked: true } });
 
 
-
-
-
 // lib/auth/session.ts
 import prisma from "../prisma";
 import { v4 as uuidv4 } from "uuid";
