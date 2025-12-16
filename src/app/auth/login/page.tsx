@@ -87,7 +87,7 @@ export default function LoginPage() {
             className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-blue-700 focus:outline-none"
             aria-label={showPassword ? "Hide password" : "Show password"}
           >
-            {showPassword ? (<Eye /> ) : ( <EyeOff /> )}
+            {showPassword ? (<Eye className="size-5"/> ) : ( <EyeOff className="size-5"/> )}
           </button>
         </div>
 

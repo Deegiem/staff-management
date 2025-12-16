@@ -124,7 +124,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Verify session ID matches
-    if (session.id !== payload.sessionId) {
+    if (session.id.toString() !== payload.sessionId) {
       return NextResponse.json({ error: "Session mismatch." }, { status: 401 });
     }
 

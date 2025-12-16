@@ -468,7 +468,7 @@ export default function StaffListPage() {
               <span className="font-semibold text-gray-800">
                 {pagination.total}
               </span>{" "}
-              entries
+              staff
             </div>
 
             {/* Pagination Controls */}
